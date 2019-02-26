@@ -16,7 +16,11 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(tseries)
 library(forecast)
-
+library(tmap)
+library(sf)
+library(leaflet)
+library(ggrepel)
+library(RColorBrewer)
 ```
 
 ```{r data, warning=FALSE, message=FALSE}
@@ -58,8 +62,21 @@ plot(truckee_hw) #Original data with the predication on top to check model accur
 
 truckee_forecast<- forecast(truckee_hw, h=60) #forecasting for 5 years, 60 months
 plot(truckee_forecast, xlab = "Year", ylab = "Mean Discharge Value", sub = "Exponential smoothing of predictions about the Truckee River's future discharge. Data:USGS")
-title(main = list ("Exponential smoothing of predictions about future monthly averaged discharge from the Truckee River suggest that there will be a flatening trend in discharge from 2015-2020" [2]))
 
 #Check the distribution of residuals
 hist(truckee_forecast$residuals) #look pretty normal
 ```
+
+##Task 3: Mapping California's National Parks
+```{r}
+#read in park data
+np<- read_sf(".", layer="nps_boundary") %>% 
+  st_transform(crs=4326)
+
+plot(np)
+#Read in CA county data
+ca_counties<- read_sf(".", layer= "california_county_shape_file")
+st_crs(ca_counties)=4326
+
+```
+
