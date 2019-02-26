@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ##Task 2: Truckee River Flow (2000-2016)
 
-```{r packages}
+```{r packages, warning=FALSE, message=FALSE}
 #Attached packages
 library(tidyverse)
 library(tseries)
@@ -19,7 +19,7 @@ library(forecast)
 
 ```
 
-```{r data}
+```{r data, warning=FALSE, message=FALSE}
 #Load data
 truckee<- read_csv("truckee_flow.csv")
 
@@ -35,15 +35,14 @@ plot(truckee_dc)
 
 ###Task 2a. Description of the decomposed graphs
 - The decomposed data show stationary, additive time series data with clear seasonality within each year.
-- The overall trend seems to be decreasing over time
-- There might be a longer ~5 year trend beyond the normal seasonality, but it not easily discernable. 
-- There are no perceptible outliers in this dataset
+- The overall trend seems to be decreasing over time, with no perceptible outliers in this dataset.
+- There might be a longer (~5 year) trend beyond the normal seasonality, but it not easily discernable. 
 - Based on the scale, residuals might be a big contributor (i.e. there is a lot of noise beyond seasonality)
 
 
 
 ###Task 2b. Forecasting for 5 years - exponential smoothing (Holt-Winters)
-```{r forecast}
+```{r forecast, warning=FALSE, message=FALSE}
 
 truckee_hw<-HoltWinters(truckee_ts)
 #truckee_hw
@@ -58,17 +57,9 @@ plot(truckee_hw) #Original data with the predication on top to check model accur
 #Future forecasting with holtwinters
 
 truckee_forecast<- forecast(truckee_hw, h=60) #forecasting for 5 years, 60 months
-plot(truckee_forecast, xlab = "Year", ylab = "Mean Discharge Value", sub = "Exponential smoothing of predictions about future discharge from the Truckee River")
+plot(truckee_forecast, xlab = "Year", ylab = "Mean Discharge Value", sub = "Exponential smoothing of predictions about the Truckee River's future discharge. Data:USGS")
 title(main = list ("Exponential smoothing of predictions about future monthly averaged discharge from the Truckee River suggest that there will be a flatening trend in discharge from 2015-2020" [2]))
 
 #Check the distribution of residuals
 hist(truckee_forecast$residuals) #look pretty normal
-
 ```
-
-```{r forecast_plot}
-
-ggplot(truckee_forecast, aes(x=year_nu, ))
-
-```
-
