@@ -1,0 +1,73 @@
+---
+title: "Assignment 3"
+author: "Vienna Saccomanno"
+date: "2/26/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Task 2: Truckee River Flow (2000-2016)
+
+```{r packages}
+#Attached packages
+library(tidyverse)
+library(tseries)
+library(forecast)
+
+```
+
+```{r data}
+#Load data
+truckee<- read_csv("truckee_flow.csv")
+
+#Convert data to time series data
+truckee_ts<- ts(truckee$mean_va, frequency = 12, start = c(2000,1)) #Start in January, 2000
+#truckee_ts
+plot(truckee_ts)
+
+#Decompse the time series
+truckee_dc<-decompose(truckee_ts)
+plot(truckee_dc)
+```
+
+###Task 2a. Description of the decomposed graphs
+- Stationary ?
+- Outliers ?
+- Cyclical trend beyond normal season ? Based on the scale, residuals might be a big contributor 
+- There is moderate seasonality within each year
+- The overall trend seems to be decreasing over time
+- The time series data seem to be additiive (observed = trend + seasonal + random)
+
+
+###Task 2b. Forecasting for 5 years - exponential smoothing (Holt-Winters)
+```{r forecast}
+
+truckee_hw<-HoltWinters(truckee_ts)
+#truckee_hw
+
+#Smoothing parameters:
+ #alpha: 0.2418713
+ #beta : 0
+ #gamma: 0.3384547
+
+plot(truckee_hw) #Original data with the predication on top to check model accuracy (not yet forecasting)
+
+#Future forecasting with holtwinters
+
+truckee_forecast<- forecast(truckee_hw, h=60) #forecasting for 5 years, 60 months
+plot(truckee_forecast, xlab = "Year", ylab = "Mean Discharge Value")
+
+#Check the distribution of residuals
+hist(truckee_forecast$residuals) #look pretty normal
+
+```
+
+```{r forecast_plot}
+
+ggplot(truckee_forecast, aes(x=year_nu, ))
+
+```
+
