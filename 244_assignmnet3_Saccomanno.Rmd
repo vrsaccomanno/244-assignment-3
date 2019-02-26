@@ -34,12 +34,12 @@ plot(truckee_dc)
 ```
 
 ###Task 2a. Description of the decomposed graphs
-- Stationary ?
-- Outliers ?
-- Cyclical trend beyond normal season ? Based on the scale, residuals might be a big contributor 
-- There is moderate seasonality within each year
+- The decomposed data show stationary, additive time series data with clear seasonality within each year.
 - The overall trend seems to be decreasing over time
-- The time series data seem to be additiive (observed = trend + seasonal + random)
+- There might be a longer ~5 year trend beyond the normal seasonality, but it not easily discernable. 
+- There are no perceptible outliers in this dataset
+- Based on the scale, residuals might be a big contributor (i.e. there is a lot of noise beyond seasonality)
+
 
 
 ###Task 2b. Forecasting for 5 years - exponential smoothing (Holt-Winters)
@@ -58,7 +58,8 @@ plot(truckee_hw) #Original data with the predication on top to check model accur
 #Future forecasting with holtwinters
 
 truckee_forecast<- forecast(truckee_hw, h=60) #forecasting for 5 years, 60 months
-plot(truckee_forecast, xlab = "Year", ylab = "Mean Discharge Value")
+plot(truckee_forecast, xlab = "Year", ylab = "Mean Discharge Value", sub = "Exponential smoothing of predictions about future discharge from the Truckee River")
+title(main = list ("Exponential smoothing of predictions about future monthly averaged discharge from the Truckee River suggest that there will be a flatening trend in discharge from 2015-2020" [2]))
 
 #Check the distribution of residuals
 hist(truckee_forecast$residuals) #look pretty normal
