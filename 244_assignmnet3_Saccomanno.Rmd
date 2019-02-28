@@ -70,7 +70,7 @@ hist(truckee_forecast$residuals) #look pretty normal
 ##Task 3: Mapping California's National Parks
 ```{r}
 #read in park data
-np<- read_sf(".", layer="nps_boundary") %>% 
+nps<- read_sf(".", layer="nps_boundary") %>% 
   st_transform(crs=4326)
 
 plot(np)
