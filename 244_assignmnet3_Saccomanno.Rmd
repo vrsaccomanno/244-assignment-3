@@ -20,6 +20,7 @@ library(tmap)
 library(sf)
 library(leaflet)
 library(ggrepel)
+library(ggspatial)
 library(RColorBrewer)
 ```
 
@@ -68,15 +69,49 @@ hist(truckee_forecast$residuals) #look pretty normal
 ```
 
 ##Task 3: Mapping California's National Parks
-```{r}
-#read in park data
-nps<- read_sf(".", layer="nps_boundary") %>% 
-  st_transform(crs=4326)
+```{r data2,  warning=FALSE, message=FALSE}
 
-plot(np)
 #Read in CA county data
 ca_counties<- read_sf(".", layer= "california_county_shape_file")
 st_crs(ca_counties)=4326
 
+#plot(ca_counties)
+
 ```
+
+```{r data3,  warning=FALSE, message=FALSE}
+#read in park data
+nps<- read_sf(".", layer="nps_boundary") %>% 
+  filter(STATE=="CA") %>% 
+  filter(UNIT_TYPE== "National Park") 
+  
+st_crs(nps)=4326
+#View(nps)
+```
+
+```{r map,  warning=FALSE, message=FALSE}
+#Map just CA's parks
+ca_nps <- ca_counties %>% 
+  st_join(nps) %>% 
+  filter(PARKNAME !="NA")
+View(ca_nps)
+
+#ca_nps<- ca_nps[!duplicated(ca_nps$UNIT_NAME),]
+
+ca_nps_points<- st_centroid(ca_nps)
+ca_nps_points<- cbind(ca_nps, st_coordinates(st_centroid(ca_nps$geometry)))
+
+ca_np_map <-ggplot()+
+  geom_sf(data=ca_counties, fill = "wheat3", color="NA")+
+  geom_sf(data= nps, fill="lemonchiffon4", color="NA")+
+  geom_label_repel(data = ca_nps_points[c(1, 5, 9, 10, 13, 21, 20, 18),], aes(x=X, y=Y, label=UNIT_NAME), nudge_x = -1, nudge_y = 1)+
+  xlab("")+
+  ylab("")+
+  coord_sf(datum=NA) 
+
+ca_np_map
+
+```
+
+##Task 4: Truckee River Flow (2000-2016)
 
