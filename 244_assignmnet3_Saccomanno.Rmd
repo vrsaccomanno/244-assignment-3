@@ -9,6 +9,20 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Task 1: Open Science Perspectives
+The McKiernan article suggests that open practices can help researchers gain more media attention, potential collaborators, citations, career opportunities, and potential collaborators. In regards to publishing, higher citation rates are associated with publishing openly. The McKiernan article cites a study that found that open access (OA) articles had a 36–172% advantage in citations over non-OA articles. In regards to media attention, the article cites a study that found that of over 2,000 articles published in Nature Communications, those published openly received nearly double the number of tweeters and Mendeley readers as closed-access.
+
+The McKiernan article suggests that the impact factors of open-access journals are approaching those of subscription journals. This is good news as, even though there is evidence suggesting that the impact factor is a flawed metric that does not correlate well with the quality of individual articles, there is a broad concern in the scientific community about publishing in journals with high impact factors. Additionally, several open-access journals have transparent review processes; the McKiernan article suggests that open peer review may result in reviews of higher quality, including more substantiated claims and better constructive criticisms, relative to closed reviews. However, Bahlai et al. (2018) provide a compelling narrative as to why anonymity in the review process can actually remove barriers; this perspective will be discussed later in this review.
+
+In regards to funding, the McKiernan suggests that there are several new fellowships and awards dedicated to open research, which illustrates novel norms and opportunities to gain recognition for sharing one's work openly. Furthermore, open practices have been observed to make it easier for researchers to connect with one another via increasing the visibility of work and creating new opportunities to interact on collaborative projects.
+
+While the above-summarized benefits of open research are positive and promising, there are some problems with how open science is currently approached regarding
+inclusiveness, equity, and accessibility. The McKiernan article cites a study that found that of 1,357 OA journals, 29% requested article processing charges, which can be a barrier to publishing in open-access journals. Bahlai et al. (2018) suggest that it is possible that a scientist might pay these fees out of pocket due to a lack of funding, making these fees a noteworthy barrier. 
+According to Bahlai et al. (2018) a scientist’s career stage, employment status/stability, financial situation, country of origin or residence, and race, gender identity, and ethnicity may all create barriers to specific aspects of open science. For example, the hierarchy inherent in science may prevent an early-career scientist from justly commenting on a senior scientist’s paper out of fear of retaliation. Bahlai et al. (2018) further explain that, by making one’s name and institution public, an early-career scientist makes themselves vulnerable to others questioning their legitimacy based on numerous biases: institution origin, nationality, sex, etc. Bahlai et al. (2018) emphasize that people of color, women, and especially women of color have been shown to benefit greatly from blind review processes thanks to reduced active and unconscious bias.
+
+While there are several approaches I am using to make my work more reproducible and open, I hope to intentionally increase these efforts in the near future. The Bren Master’s Thesis (GP) process has been a wonderful learning process for making work open and accessible. Having a public GP GitHub repository is an excellent foundation for open-practices. Our hope with a public GitHub account is that interested scientists will have access to our data, code, and other materials to make it easier to reproduce the findings of our research as we are aware that data sharing is correlated with fewer reporting errors, relative to papers with unavailable data. Currently, our GP has not published any of our findings. This is true for peer-reviewed papers, white-papers, policy briefs, etc. Perhaps our team could overcome this limitation by pre-registering the scientific paper we hope to publish.  
+
+
 ##Task 2: Truckee River Flow (2000-2016)
 
 ```{r packages, warning=FALSE, message=FALSE}
@@ -148,13 +162,13 @@ liz
 ```
 
 ####Task 4, question one conclusion:
--Final sentence for publication: These data suggest that there is not a significant difference in weight between male and female lizards in the Northern Chihuahuan Desert (U =2255.5, p =0.5844)
+- Final sentence for publication: These data suggest that there is not a significant difference in weight between male and female lizards in the Northern Chihuahuan Desert (U =2255.5, p =0.5844)
 - The results of the Mann-Whitney U test suggest that, if the null hypothesis is true, the probability that we would have taken two samples that are this different by random chance is 58.4%; therefore, it is unlikely that the weights of male and female lizards differ significantly.
 
 
 ###Part 2. Is there a significant difference in the proportion of adult male and female lizards with broken tails?
 
-```{r loaddata4, warning=FALSE, message=FALSE}
+```{r loaddata5, warning=FALSE, message=FALSE}
 
 #Load data. This dataset has missing information (likely MCAR or MAR). My approach will be listwise deletion because this is a large dataset (n=132 without missings)
 lizard_tails<- read_csv("lter_lizard_pitfall.csv") %>% 
@@ -164,12 +178,13 @@ lizard_tails<- read_csv("lter_lizard_pitfall.csv") %>%
   filter(sex %in% c("M","F")) %>% 
   group_by(tail)
 
-View(lizard_tails)
 
 #Will run a Chi Squared test for independance. Null Hypothesis: there is no association between sex and broken tails.
 
 tails_chi<-chisq.test(lizard_tails$sex, lizard_tails$tail)
 tails_chi
+
+#X-squared = 0.30857, df = 1, p-value = 0.5786
 ```
 
 ####Task 4, question two conclusion:
