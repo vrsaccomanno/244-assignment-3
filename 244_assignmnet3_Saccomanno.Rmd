@@ -129,11 +129,12 @@ ca_np_map
 
 ##Task 4: Lizards in Chihuahuan Desert
 
-###Part 1. Do weights of male and female adult lizards trappt at site "CALI" differ significantly?
+###Part 1. Do weights of male and female adult lizards trapped at site "CALI" differ significantly?
 
 ```{r loaddata4, warning=FALSE, message=FALSE}
 #Load data. This dataset has missing information (likely MCAR or MAR). My approach will be listwise deletion because this is a large dataset (n=132 without missings)
 lizards<- read_csv("lter_lizard_pitfall.csv") %>% 
+  filter(rcap == "N") %>%
   select(site, sex, weight) %>% 
   filter(site=="CALI") %>% 
   filter(sex %in% c("M","F")) %>% 
@@ -146,24 +147,23 @@ lizards_weight<-mutate_at(lizards, vars(weight), as.numeric)
 #Data exploration- data are NOT normally distributed and do not meet Student's T-test assumptions.
 hist(lizards_weight$weight)
 qqnorm(lizards_weight$weight) #Data does not look normal, BUT
-length(lizards_weight$weight)
+#length(lizards_weight$weight)
 
-class(lizards$weight_f)
-class(lizards_weight$sex)
-
+#class(lizards$weight_f)
+#class(lizards_weight$sex)
 
 #Mann -Whitney U / non-parametric test
 #H0= ranks are equal
 liz<-wilcox.test(weight ~ sex, data=lizards_weight, exact=FALSE)
 liz
 
-#W = 2255.5, p-value = 0.5844
+#W = 1632, p-value = 0.6524
 
 ```
 
 ####Task 4, question one conclusion:
-- Final sentence for publication: These data suggest that there is not a significant difference in weight between male and female lizards in the Northern Chihuahuan Desert (U =2255.5, p =0.5844)
-- The results of the Mann-Whitney U test suggest that, if the null hypothesis is true, the probability that we would have taken two samples that are this different by random chance is 58.4%; therefore, it is unlikely that the weights of male and female lizards differ significantly.
+- Final sentence for publication: These data suggest that there is not a significant difference in weight between male and female lizards in the Northern Chihuahuan Desert (U =1632, p =0.6524)
+- The results of the Mann-Whitney U test suggest that, if the null hypothesis is true, the probability that we would have taken two samples that are this different by random chance is 65.2%; therefore, it is unlikely that the weights of male and female lizards differ significantly.
 
 
 ###Part 2. Is there a significant difference in the proportion of adult male and female lizards with broken tails?
@@ -172,20 +172,20 @@ liz
 
 #Load data. This dataset has missing information (likely MCAR or MAR). My approach will be listwise deletion because this is a large dataset (n=132 without missings)
 lizard_tails<- read_csv("lter_lizard_pitfall.csv") %>% 
+  filter(rcap == "N") %>% #Remove recaptured animals
   select(site, sex, tail) %>% 
   filter(site=="CALI") %>% 
   filter(tail %in% c("B","W")) %>% 
   filter(sex %in% c("M","F")) %>% 
   group_by(tail)
 
-
 #Will run a Chi Squared test for independance. Null Hypothesis: there is no association between sex and broken tails.
 
 tails_chi<-chisq.test(lizard_tails$sex, lizard_tails$tail)
 tails_chi
 
-#X-squared = 0.30857, df = 1, p-value = 0.5786
+#X-squared = 0.18157, df = 1, p-value = 0.67
 ```
 
 ####Task 4, question two conclusion:
-- There is not a significant association between lizard sex and broken tails (X2(1)=0.308, p=0.5786)
+- There is not a significant association between lizard sex and broken tails ($X^2$(1)=0.18157, p=0.67)
