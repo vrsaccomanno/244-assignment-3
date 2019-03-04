@@ -113,5 +113,33 @@ ca_np_map
 
 ```
 
-##Task 4: Truckee River Flow (2000-2016)
+##Task 4: Lizards in Chihuahuan Desert
+
+###Part 1. Do weights of male and female adult lizards trappt at site "CALI" differ significantly?
+
+```{r loaddata4, warning=FALSE, message=FALSE}
+#Load data. This dataset has missing information (likely MCAR or MAR). My approach will be listwise deletion because this is a large dataset (n=132 without missings)
+lizards<- read_csv("lter_lizard_pitfall.csv") %>% 
+  select(site, sex, weight) %>% 
+  filter(site=="CALI") %>% 
+  filter(sex %in% c("M","F")) %>% 
+  filter(weight !=".")
+
+#Making weight numeric
+lizards_weight<-mutate_at(lizards, vars(weight), as.numeric)
+
+class(lizards_weight$weight)
+class(lizards_weight$sex)
+
+#Data exploration- data are NOT normally distributed and do not meet Student's T-test assumptions.
+hist(lizards_weight$weight)
+qqnorm(lizards_weight$weight) #Data does not look normal, BUT
+length(lizards_weight$weight)
+
+#Mann -Whitney U / non-parametric test
+#H0= ranks are equal
+wilcox.test(liz_weight$)
+
+```
+
 
