@@ -123,23 +123,45 @@ lizards<- read_csv("lter_lizard_pitfall.csv") %>%
   select(site, sex, weight) %>% 
   filter(site=="CALI") %>% 
   filter(sex %in% c("M","F")) %>% 
-  filter(weight !=".")
+  filter(weight !=".") %>% 
+  group_by(sex)
 
 #Making weight numeric
 lizards_weight<-mutate_at(lizards, vars(weight), as.numeric)
-
-class(lizards_weight$weight)
-class(lizards_weight$sex)
 
 #Data exploration- data are NOT normally distributed and do not meet Student's T-test assumptions.
 hist(lizards_weight$weight)
 qqnorm(lizards_weight$weight) #Data does not look normal, BUT
 length(lizards_weight$weight)
 
+class(lizards$weight_f)
+class(lizards_weight$sex)
+
+
 #Mann -Whitney U / non-parametric test
 #H0= ranks are equal
-wilcox.test(liz_weight$)
+liz<-wilcox.test(weight ~ sex, data=lizards_weight, exact=FALSE)
+liz
+
+#W = 2255.5, p-value = 0.5844
 
 ```
 
+####Task 4, question one conclusion:
+- The results of the Mann-Whitney U test suggest that, if the null hypothesis is true, the probability that we would have taken two samples that are this different by random chance is 58.4%; therefore, it is unlikely that the weights of male and female lizards differ significantly.
+
+###Part 2. Is there a significant difference in the proportion of adult male and female lizards with broken tails?
+
+```{r loaddata4, warning=FALSE, message=FALSE}
+
+#Load data. This dataset has missing information (likely MCAR or MAR). My approach will be listwise deletion because this is a large dataset (n=132 without missings)
+lizard_tails<- read_csv("lter_lizard_pitfall.csv") %>% 
+  select(site, sex, tail) %>% 
+  filter(site=="CALI") %>% 
+  filter(sex %in% c("B","W")) %>% 
+  filter(weight !=".") %>% 
+  group_by(sex)
+
+
+```
 
